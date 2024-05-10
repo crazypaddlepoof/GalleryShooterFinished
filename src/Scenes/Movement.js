@@ -119,8 +119,8 @@ class GroupBullet extends Phaser.Scene {
        smallenemy.scorePoints = 25;
        smallenemy.health = health;
 
-       smallenemy.lastShotTime = 0; // Initialize last shot time
-       smallenemy.shootingInterval = shootingInterval; // Milliseconds between shots
+       smallenemy.lastShotTime = 0; 
+       smallenemy.shootingInterval = shootingInterval; 
    
        smallenemy.startFollow({
            duration: 10000,
@@ -130,7 +130,7 @@ class GroupBullet extends Phaser.Scene {
            rotateToPath: rotateToPath,
            rotationOffset: rotationOffset,
            onStart: () => {
-            this.shootBulletFromEnemy(smallenemy); // Shoot immediately as it starts following the path
+            this.shootBulletFromEnemy(smallenemy); 
             this.scheduleShooting(smallenemy); 
            },
            onComplete: () => {
@@ -148,7 +148,7 @@ class GroupBullet extends Phaser.Scene {
             callback: () => {
                 if (enemy.active) { 
                     this.shootBulletFromEnemy(enemy);
-                    this.scheduleShooting(enemy); // Reschedule the next shot
+                    this.scheduleShooting(enemy); 
                 }
             },
             callbackScope: this
@@ -156,12 +156,12 @@ class GroupBullet extends Phaser.Scene {
     }
 
     shootBulletFromEnemy(enemy) {
-    let currentTime = this.time.now; // Get current time
+    let currentTime = this.time.now; 
     if (this.my.sprite.enemyBullets.length < this.maxEnemyBullets && currentTime - enemy.lastShotTime > enemy.shootingInterval) {
         let bullet = this.add.sprite(enemy.x, enemy.y, "enemybullet");
         bullet.isActive = true;
         this.my.sprite.enemyBullets.push(bullet);
-        enemy.lastShotTime = currentTime; // Update the last shot time
+        enemy.lastShotTime = currentTime; 
     }
     }
 
@@ -173,8 +173,8 @@ class GroupBullet extends Phaser.Scene {
         my.text.health.setText("Health: " + this.playerHealth);
         this.my.sprite.enemyBullets.forEach(bullet => {
             if (this.collides(bullet, this.my.sprite.player)) {
-                this.playerHealth -= 1; // Damage the player
-                bullet.isActive = false; // Mark bullet as not active for removal
+                this.playerHealth -= 1; 
+                bullet.isActive = false; 
                 bullet.destroy();
         
                 if (this.playerHealth <= 0) {
@@ -199,7 +199,7 @@ class GroupBullet extends Phaser.Scene {
             }
         }
 
-        // Check for bullet being fired
+        // Check for bullet being shot
         if (Phaser.Input.Keyboard.JustDown(this.space)) {
             if (my.sprite.bullet.length < this.maxBullets) {
                 let newBullet = this.add.sprite(
@@ -226,7 +226,6 @@ class GroupBullet extends Phaser.Scene {
                         // Start explosion animation
                         this.explosion = this.add.sprite(enemy.x, enemy.y, "explosion2").setScale(1).play("explosion");
                         enemy.destroy();
-                        // Clear out bullet -- put y offscreen, will get reaped next update
                         bullet.y = -100;
                         this.myScore += enemy.scorePoints;
                         this.updateScore();
@@ -272,11 +271,10 @@ class GroupBullet extends Phaser.Scene {
         // Check for collisions between enemy bullets and player
         this.my.sprite.enemyBullets.forEach(bullet => {
             if (this.collides(bullet, this.my.sprite.player)) {
-                // Handle collision, e.g., reduce player health, show explosion
                 bullet.destroy();  // Remove the bullet
                 // Additional effects (e.g., player damage or explosion)
                 this.sound.play("shoot", {
-                    volume: 1   // Can adjust volume using this, goes from 0 to 1
+                    volume: 1   
                 });
             }
         });
@@ -306,6 +304,6 @@ class GroupBullet extends Phaser.Scene {
         this.my.sprite.enemyBullets = [];
         this.my.sprite.smallenemy = [];
         this.myScore = 0;
-        this.playerHealth = 3;  // Reset player health to initial value
+        this.playerHealth = 3;  
     }
 }
